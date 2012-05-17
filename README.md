@@ -13,18 +13,13 @@ add to it, and anything else you might dream up.
 
 Features
 ===
-History file (Because sometimes you forget) (Done/stable testing)
-=====
-Logging (Messy/testing)
-=====
-RC file/customizble startup (in progress/development/testing)
-=====
-Job Control (Because that's what REAL shells do)(Planned)
-=====
-Tab completion (Can't live without it)(Far future/Planned)
-=====
-Scripting (Because it's nice to be lazy) (Far future/Planned)
-=====
+History file (Because sometimes you forget) (Done/stable testing) 
+Logging (Messy/testing) 
+RC file/customizble startup (in progress/development/testing) 
+Job Control (Because that's what REAL shells do)(Planned) 
+Tab completion (Can't live without it)(Far future/Planned) 
+Scripting (Because it's nice to be lazy) (Far future/Planned) 
+
   
 Getting cash
 ===
