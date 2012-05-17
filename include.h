@@ -28,6 +28,7 @@
 #include <syslog.h>
 #include <limits.h>
 #include <pwd.h>
+#include <readline/readline.h>
 
 /* Prototypes */
 void open_log(void);

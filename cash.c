@@ -53,6 +53,7 @@ _Bool open_history_file;  /*history file open. 1 is open, 0 is not*/
 _Bool no_history;         /*no history option, 1 is no history, 0 no history*/
 _Bool logging;            /*logging option, 1 is on, 0 is off.*/
 _Bool verbose;            /*verbose option, 1 is on, 0 is off.*/
+_Bool specified_PS1;
 
 /* This is our structure to hold environment variables */
 ENVIRONMENT *env;
@@ -61,6 +62,9 @@ ENVIRONMENT *env;
 const char* shell_user = "\\u";
 const char* shell_cwd = "\\w";
 const char* shell_host = "\\h";
+const char* shell_version = "\\v";
+
+const char* default_prompt = "\\v:\\w$ ";
 
 extern int built_ins(char **);
 extern void print_usage(FILE*, int, const char *);
@@ -91,7 +95,7 @@ void exit_clean(int ret_no){
     free(env);
   if(rc_file)
     fclose(rc_file);
-  if(PS1)
+  if(PS1 && specified_PS1 == 1)
     free(PS1);
   if(logging){
     syslog(LOG_DEBUG, "shell exited");
@@ -174,6 +178,7 @@ void parse_rc(void){
       PS1 = malloc(sizeof(char) * (i+1));
       strncpy(PS1, p, i);
       PS1[i] = '\0';
+      specified_PS1 = 1;
     }
   }
   free(buf);
@@ -200,6 +205,7 @@ void format_prompt(char* dst, int len){
   gethostname(buf, 4096);
   strrplc(dst, shell_host, buf);
   strrplc(dst, shell_cwd, env->cur_dir);
+  strrplc(dst, shell_version, version_string);
 }
 
 void parse(char *line, char **argv){
@@ -289,7 +295,7 @@ int main(int argc, char* arg[]){
   restricted = 0;
   no_history = 0;
   verbose    = 0;
-
+  char* input = 0;
   get_options(argc,arg);
 
   if(logging){
@@ -298,6 +304,11 @@ int main(int argc, char* arg[]){
   }
   init_env();
   parse_rc();
+
+  if(!PS1){
+    PS1 = default_prompt; 
+    specified_PS1 = 0;
+  }
 
   /*
    * Here's the main loop.
@@ -315,23 +326,8 @@ int main(int argc, char* arg[]){
     if( (getcwd(env->cur_dir, sizeof(env->cur_dir)) == NULL)) {
       if(logging)
 	syslog(LOG_ERR, "couldnt get current working directory");
-    }
-    else
-      if(restricted)
-	fprintf(stdout,"%s$ ", version_string);
-    else
-      if(PS1){
-	memset(fmt_PS1, 0, 4096);
-	format_prompt(fmt_PS1, 4096);
-	fprintf(stdout, "%s", fmt_PS1);
-      }
-      else
-	fprintf(stdout,"%s$ ", version_string);
-    if(fgets(line, 4096, stdin) == NULL)
-	  continue;
-    if(line[1] == '\0'){
-      continue;
-    }
+    }    
+    
     if(!no_history){
       if(write_history_file(line) == -1){
 	fprintf(stderr,"history disabled, if logging is enabled check /var/log/messages for more info\n");
@@ -339,8 +335,17 @@ int main(int argc, char* arg[]){
 	no_history = 1;
       }
     }
-    rm_nl(line, strlen(line));
+    
+    memset(fmt_PS1, 0, 4096);
+    format_prompt(fmt_PS1, 4096);
+    
+    input = readline(fmt_PS1);
+    if(!input)
+      exit_clean(0);
+    
+    strcpy(line, input);
     parse(line, argv);      
+    
     if(built_ins(argv) == 1)
       continue;
     else
