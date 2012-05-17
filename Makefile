@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS= -g -Wall -pedantic -O2 -march=athlon64
+CFLAGS= -g -Wall -pedantic -std=gnu99 -O2 -march=athlon64
 make: 
-	gcc ${CFLAGS} cash.c -o cash
+	${CC} ${CFLAGS} cash.c -o cash
 clean:
 	rm cash

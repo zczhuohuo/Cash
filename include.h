@@ -19,7 +19,7 @@
 
 /*Informational stuff*/
 const char *version_string = "cash-0.1";
-const char *help_string = "Cash, version 0.1, Linux\n--help        -h    show this help screen\n--version     -v    show version info\n--restricted  -r    run restricted shell (no cd)\n--no-history  -n    dont write history to file for this session\n--logging     -l    the shell will keep a log in /var/log/messages for this session\n--verbose     -V    the shell will write the log to both /var/log/messages and stderr.                                        logging will be turned on with verbose\n";
+const char *help_string = "Cash, version 0.1, Linux\n--help        -h    show this help screen\n--version     -v    show version info\n--restricted  -r    run restricted shell (no cd)\n--no-history  -n    dont write history to file for this session\n--logging     -l    the shell will keep a log in /var/log/messages for this session\n--verbose     -V    the shell will write the log to both /var/log/messages and stderr.                                        logging will be turned on with verbose\n--alt-hist  -f <filename>  The shell will write history to the file you specify                                                      instead of the default ~/.cash_history.\n";
 
 const struct option long_options[] = {
   {"restricted", 0, NULL, 'r'},
