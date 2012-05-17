@@ -52,7 +52,7 @@ int cash_interactive, cash_terminal;
 /*flags*/
 _Bool restricted;         /*For restricted shell, 1 is restricted, 0 is not*/
 _Bool open_history_file;  /*history file open. 1 is open, 0 is not*/
-_Bool no_history;         /*no history option, 1 is no history, 0 no history*/
+_Bool no_history;         /*no history option, 1 is no history, 0 history*/
 _Bool logging;            /*logging option, 1 is on, 0 is off.*/
 _Bool verbose;            /*verbose option, 1 is on, 0 is off.*/
 _Bool alt_hist;           /*alt history file specified. 1 is yes, 0 is no*/
