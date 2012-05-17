@@ -17,61 +17,17 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
 
-/*Informational stuff*/
-const char *version_string = "cash-0.1";
-const char *help_string = "Cash, version 0.1, Linux\n--help        -h    show this help screen\n--version     -v    show version info\n--restricted  -r    run restricted shell (no cd)\n--no-history  -n    dont write history to file for this session\n--logging     -l    the shell will keep a log in /var/log/messages for this session\n--verbose     -V    the shell will write the log to both /var/log/messages and stderr.                                        logging will be turned on with verbose\n";
-
-const struct option long_options[] = {
-  {"restricted", 0, NULL, 'r'},
-  {"help",       0, NULL, 'h'},
-  {"no-history", 0, NULL, 'n'},
-  {"version",    0, NULL, 'v'},
-  {"verbose",    0, NULL, 'V'},
-  {"logging",    0, NULL, 'l'},
-  {NULL,         0, NULL,  0 }
-};
-
-/*for input*/
-char line[4096];        
-char *argv[4096] = {NULL};  
-
-/*History file, filename, and open flag*/
-const char *history_filename = "/.cash_history";    
-const char *rc_filename = "/.cashrc";
-char *home_path;
-FILE *history_file;
-FILE *rc_file;
-char *PS1;
-
-/*Shell stuff*/
-pid_t cash_pid;
-int cash_interactive, cash_terminal;
-
-/*flags*/
-_Bool restricted;         /*For restricted shell, 1 is restricted, 0 is not*/
-_Bool open_history_file;  /*history file open. 1 is open, 0 is not*/
-_Bool no_history;         /*no history option, 1 is no history, 0 no history*/
-_Bool logging;            /*logging option, 1 is on, 0 is off.*/
-_Bool verbose;            /*verbose option, 1 is on, 0 is off.*/
-
-/*Environment stuff*/
-typedef struct{
-  char *home,
-    *logname,
-    *display,
-    *path,
-    *term;
-  char cur_dir[PATH_MAX];
-}ENVIRONMENT;
-
-/* This is our structure to hold environment variables */
-ENVIRONMENT *env;
-
-/* Custom shell option strings */
-const char* shell_user = "\\u";
-const char* shell_cwd = "\\w";
-const char* shell_host = "\\h";
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+#include <unistd.h>
+#include <errno.h>
+#include <getopt.h>
+#include <sys/wait.h>
+#include <syslog.h>
+#include <limits.h>
+#include <pwd.h>
 
 /* Prototypes */
 void open_log(void);
