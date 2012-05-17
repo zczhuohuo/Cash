@@ -130,7 +130,8 @@ void parse_rc(void){
   } else
       return;
   if(!(rc_file = fopen(buf, "r"))){
-    syslog(LOG_DEBUG, "rc file wasnt found or couldnt be opened");
+    if(logging)
+      syslog(LOG_DEBUG, "rc file wasnt found or couldnt be opened");
     return;
   }
   memset(buf, 0, 4096);
