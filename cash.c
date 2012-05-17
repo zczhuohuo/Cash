@@ -149,23 +149,10 @@ void parse_rc(void){
   free(buf);
 }
 
-int get_username(char* dst, int len){
-  struct passwd* pw;
-  uid_t uid;
-  uid = geteuid();
-  pw = getpwuid(uid);
-  if(pw){
-    strncpy(dst, pw->pw_name, len);
-    return 0;
-  } else
-    return 1;
-}
-
 void format_prompt(char* dst, int len){
   char buf[4096];
   strcpy(dst, PS1);
-  get_username(buf, 4096);
-  strrplc(dst, shell_user, buf);
+  strrplc(dst, shell_user, env->logname);
   memset(buf, 0, sizeof(buf));
   gethostname(buf, 4096);
   strrplc(dst, shell_host, buf);
