@@ -1,4 +1,4 @@
-/*(C) Copyright 2012 Tyrell Keene
+/*(C) Copyright 2012 Tyrell Keene, Max Rose
   This file is part of Cash.
 
   Cash is free software: you can redistribute it and/or modify
@@ -343,6 +343,9 @@ int main(int argc, char* arg[]){
     if(!input)
       exit_clean(0);
     
+    if(strlen(input) < 1)
+      continue;
+
     strcpy(line, input);
     parse(line, argv);      
     
