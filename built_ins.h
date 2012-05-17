@@ -16,15 +16,15 @@
 */
 
 int built_ins(char *in[]){
-  if(strcmp(in[0], "#") == 0)
+  if(strncmp(in[0], "#", 1) == 0)
     return 1;
   if(strcmp(in[0], "exit") == 0){
     exit_clean(0);
   }
-  if(restricted && strcmp(in[0], "cd") == 0){
+  if(restricted && strncmp(in[0], "cd", 2) == 0){
     fprintf(stderr,"Can't cd: restricted shell\n");
     if(logging)
-      syslog(LOG_NOTICE,"restricted shell attempted to cd");
+      syslog(LOG_NOTICE,"user %s attempted to cd in restricted shell", env->logname);
     else
       return 1;
   }
@@ -34,7 +34,7 @@ int built_ins(char *in[]){
      * shell is run with the -r/--restrcited flag. Make sure not to put anything
      * critical here, or there will be issues
      */
-    if(strcmp(in[0], "cd") == 0 && in[1] != NULL) {
+    if(strncmp(in[0], "cd", 2) == 0 && in[1] != NULL) {
     if(chdir(in[1]) == -1){
       perror("cd");
       return 1;
@@ -52,7 +52,7 @@ int built_ins(char *in[]){
   }
   else
     return 0;
-} /*End restricted*/
+} /*End restricted built-ins*/
 
 void print_usage(FILE* stream, int exit_code, const char *string){
   fprintf(stream, "%s", string);
@@ -61,7 +61,7 @@ void print_usage(FILE* stream, int exit_code, const char *string){
 
 void get_options(int arg_count, char **arg_value){
   int next_option;
-  const char* const short_options = "hrnvlV";
+  const char* const short_options = "hrnvlVf:";
   /*Here we check for startup flags, and act accordingly*/
   do {
     next_option = getopt_long(arg_count, arg_value, short_options, long_options, NULL);
@@ -83,10 +83,17 @@ void get_options(int arg_count, char **arg_value){
       logging = 1;
       break;
     case 'V':
-      fprintf(stderr,"log will be written to both /var/log/messages and stderr\n");
       if(!logging)
 	logging = 1;
       verbose = 1;
+      fprintf(stderr,"log will be written to both /var/log/messages and stderr\n");
+      break;
+    case 'f':
+      if(logging)
+      	syslog(LOG_DEBUG,"history will be written to %s instead of %s", optarg, history_filename);
+      alt_history_filepath = optarg;
+      alt_hist = 1;
+      break;
     case -1:
       break;
     case '?':

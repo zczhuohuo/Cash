@@ -31,7 +31,6 @@
 #include "include.h"
 #include "built_ins.h"
 
-
 extern int built_ins(char **);
 extern void print_usage(FILE*, int, const char *);
 extern void get_options(int, char **);
@@ -206,12 +205,22 @@ void rm_nl(char *sp, int len){
  */
 
 int write_history_file(char *input){
-  if(open_history_file == 0){
-    if(home_path == NULL)
-      home_path = malloc(sizeof(char) * 4096);
+  if(!open_history_file){
+    if(alt_hist) {
+      if(!(history_file = fopen(alt_history_filepath, "a+"))) {
+	if(logging)
+	  syslog(LOG_ERR,"unable to open alternative history file %s", alt_history_filepath);
+      }
+      else
+	open_history_file = 1;
+      fprintf(history_file,"%s", input);
+      return 0;
+    }
+    else
+      if(home_path == NULL)
+	home_path = malloc(sizeof(char) * 4096);
     strcpy(home_path, env->home);
     strcat(home_path, history_filename);
-
     if( (history_file = fopen(home_path, "a+")) == NULL){
       if(logging)
 	syslog(LOG_ERR,"unable to open history file");
@@ -258,7 +267,9 @@ int main(int argc, char* arg[]){
   logging    = 0;
   restricted = 0;
   no_history = 0;
+  alt_hist   = 0;
   verbose    = 0;
+  alt_hist   = 0;
 
   get_options(argc,arg);
 

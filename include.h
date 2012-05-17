@@ -28,6 +28,7 @@ const struct option long_options[] = {
   {"version",    0, NULL, 'v'},
   {"verbose",    0, NULL, 'V'},
   {"logging",    0, NULL, 'l'},
+  {"alt-hist",   1, NULL, 'f'},
   {NULL,         0, NULL,  0 }
 };
 
@@ -37,6 +38,7 @@ char *argv[4096] = {NULL};
 
 /*History file, filename, and open flag*/
 const char *history_filename = "/.cash_history";    
+char *alt_history_filepath;
 const char *rc_filename = "/.cashrc";
 char *home_path;
 FILE *history_file;
@@ -53,6 +55,7 @@ _Bool open_history_file;  /*history file open. 1 is open, 0 is not*/
 _Bool no_history;         /*no history option, 1 is no history, 0 no history*/
 _Bool logging;            /*logging option, 1 is on, 0 is off.*/
 _Bool verbose;            /*verbose option, 1 is on, 0 is off.*/
+_Bool alt_hist;           /*alt history file specified. 1 is yes, 0 is no*/
 
 /*Environment stuff*/
 typedef struct{
