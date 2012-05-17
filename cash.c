@@ -50,7 +50,6 @@ void open_log(void){
  * Here's our exit function. Just make sure everything
  * is freed, and any open files are closed.
  */
-
 void exit_clean(int ret_no){
   if(open_history_file)
     if(fclose(history_file) != 0){
@@ -131,8 +130,10 @@ void parse_rc(void){
     strcat(buf, rc_filename);
   } else
       return;
-  if(!(rc_file = fopen(buf, "r")))
+  if(!(rc_file = fopen(buf, "r"))){
+    syslog(LOG_DEBUG, "rc file wasnt found or couldnt be opened");
     return;
+  }
   memset(buf, 0, 4096);
   while(fgets(buf, 4096, rc_file)){
     if( (p = strstr(buf, "PS1 = \"")) ){
@@ -294,6 +295,8 @@ int main(int argc, char* arg[]){
 	format_prompt(fmt_PS1, 4096);
 	fprintf(stdout, "%s", fmt_PS1);
       }
+      else
+	fprintf(stdout,"%s$ ", version_string);
     if(fgets(line, 4096, stdin) == NULL)
 	  continue;
     if(line[1] == '\0'){
