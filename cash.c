@@ -81,8 +81,11 @@ void init_env(void){
       }
     }else{
       signal(SIGINT, SIG_IGN);
-      
-      env->home    = getenv("HOME");
+      /*Here is where we setup out environment structure. Much of the shell
+       * is based on this part working. after a call to init_env you'll end up
+       * with env full of all the environment variables that are needed. This 
+       * will go until exit where env is freed*/
+      env->home    = getenv("HOME");    
       env->logname = getenv("LOGNAME");
       env->path    = getenv("PATH");
       env->display = getenv("DISPLAY");
@@ -95,7 +98,6 @@ void init_env(void){
       setenv("TERM", env->term, 1);
 
       cash_pid = getpid();
-      open_history_file = 0;
       if(logging)
 	syslog(LOG_DEBUG, "shell spawned");
     }
@@ -131,7 +133,7 @@ void parse_rc(void){
       return;
   if(!(rc_file = fopen(buf, "r"))){
     if(logging)
-      syslog(LOG_DEBUG, "rc file wasnt found or couldnt be opened");
+      syslog(LOG_DEBUG, "rc file wasnt found or could not be opened");
     return;
   }
   memset(buf, 0, 4096);
@@ -283,7 +285,7 @@ int main(int argc, char* arg[]){
   while(1){  
     if( (getcwd(env->cur_dir, sizeof(env->cur_dir)) == NULL)) {
       if(logging)
-	syslog(LOG_ERR, "couldnt get current working directory");
+	syslog(LOG_ERR, "could not get current working directory");
     }
     else
       if(restricted)
@@ -304,7 +306,7 @@ int main(int argc, char* arg[]){
     if(!no_history){
       if(write_history_file(line) == -1){
 	fprintf(stderr,"history disabled, if logging is enabled check /var/log/messages for more info\n");
-	syslog(LOG_ERR,"history file couldn't be opened or written to, history disabled");
+	syslog(LOG_ERR,"history file could not be opened or written to, history disabled");
 	no_history = 1;
       }
     }
