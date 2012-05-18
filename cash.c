@@ -220,11 +220,11 @@ void parse(char *line, char **argv){
   *argv = '\0'; 
 }
 
-void rm_nl(char *sp, int len){
+void add_nl(char *sp, int len){
   volatile int i;
-  for(i = 0; i < len; i++){
-    if(sp[i] == '\n'){
-      sp[i] = '\0';
+  for(i = 0; i < len+1; i++){
+    if(sp[i] == '\0'){
+      sp[i] = '\n';
       break;
     }
   }
@@ -261,6 +261,7 @@ int write_history_file(char *input){
       open_history_file = 1;
     }
   }  
+  add_nl(input, strlen(input));
   fprintf(history_file, "%s", input);
   return 0;
 }
