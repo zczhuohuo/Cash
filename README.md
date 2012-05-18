@@ -1,9 +1,11 @@
 Cash - Crap, Another SHell
 ====
+-
 
 
 Why Cash?
 ===
+-
 Cash started out as a learning tool for myself to explore 
 and learn more about shells, C, and programming in a Linux environment. 
 When I couldn't stop adding features to it and kept coming back for more,
@@ -13,16 +15,17 @@ add to it, and anything else you might dream up.
 
 Features
 ===
+-
 History file (Because sometimes you forget) (Done/stable testing)
-_
+
 Logging (Messy/testing)
-_
+
 RC file/customizble startup (in progress/development)
-_
+
 Tab completion (Can't live without it)(in progress/testing. big thanks to xorsema)
-_
+
 Job Control (Because that's what REAL shells do)(Planned)
-_
+
 Scripting (Because it's nice to be lazy) (Far future/Planned)
   
 Getting cash
