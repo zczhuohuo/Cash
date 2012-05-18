@@ -57,7 +57,7 @@ int built_ins(char *in[]){
     else
       return 1;
   }
-  if(strcmp(in[0], "cd") == 0 && in[1] == NULL){
+  if(strncmp(in[0], "cd", 2) == 0 && in[1] == NULL){
     if(chdir(env->home) == -1){
       perror("cd");
       return 1;
