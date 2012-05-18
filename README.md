@@ -14,15 +14,15 @@ add to it, and anything else you might dream up.
 Features
 ===
 History file (Because sometimes you forget) (Done/stable testing)
--
+_
 Logging (Messy/testing)
--
+_
 RC file/customizble startup (in progress/development)
--
+_
 Tab completion (Can't live without it)(in progress/testing. big thanks to xorsema)
--
+_
 Job Control (Because that's what REAL shells do)(Planned)
--
+_
 Scripting (Because it's nice to be lazy) (Far future/Planned)
   
 Getting cash
